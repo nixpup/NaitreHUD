@@ -1,4 +1,5 @@
-# MangoPup Wayland Compositor and Window Manager
+# MangoPup
+## Wayland Compositor and Window Manager
 ![MangoWC Logo](https://raw.githubusercontent.com/nixpup/MangoPup/refs/heads/main/mangowc_logo.png)
 
 # Preface
@@ -20,3 +21,4 @@ So invoking `scoller_stack_left` on the selected leftmost window on your desktop
 
 # Demonstration
 [![Demo Video](https://raw.githubusercontent.com/nixpup/MangoPup/refs/heads/main/thumbnail.png)](https://github.com/nixpup/MangoPup/blob/main/demo.mp4)
+**Click the Thumbnail to Download or View the Demo Video**
