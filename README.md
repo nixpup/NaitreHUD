@@ -1,6 +1,6 @@
 # MangoPup
 ## Wayland Compositor and Window Manager
-![MangoWC Logo](https://raw.githubusercontent.com/nixpup/MangoPup/refs/heads/main/mangowc_logo.png)
+![MangoWC Logo](https://raw.githubusercontent.com/nixpup/MangoPup/refs/heads/main/mangopup_logo.png)
 
 # Preface
 This is a fork of the [MangoWC](https://github.com/DreamMaoMao/mangowc) Wayland Compositor and Window Manager with a few added features and changes made that I found to be useful or necessary. All credit goes to the creator of [MangoWC](https://github.com/DreamMaoMao/mangowc) [DreamMaoMao](https://github.com/DreamMaoMao).
