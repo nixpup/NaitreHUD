@@ -15,7 +15,11 @@ bind=Alt,period,scroller_stack_right
 You can automatically split/resize the window to the left (or right) of the currently selected window, and then move/tile the currently selected window below the window to its left (or right) via the `scroller_stack_left` (or `*_right`) option. Removing a window from a stack is triggered by invoking the action to stack in the opposite direction.
 
 ## Stacker Looping
-In your `~/.config/mango/config.conf`, there is now a new option called `stacker_loop` that can be set to either `1` (true/enable) or `0` (false/disable). This option, when enabled, allows you to, when invoking either `scroller_stack_left` with no window left of the currently selected one or vice versa for `scroller_stack_right`, to loop around all windows to the other end and create a stack there.
+In your `~/.config/mango/config.conf`, there is now a new option called `stacker_loop` that can be set to either `1` (true/enable) or `0` (false/disable), which looks like this:
+```
+stacker_loop=1
+```
+This option, when enabled, allows you to, when invoking either `scroller_stack_left` with no window left of the currently selected one or vice versa for `scroller_stack_right`, to loop around all windows to the other end and create a stack there.
 
 So invoking `scoller_stack_left` on the selected leftmost window on your desktop, while `stacker_loop=1` is in your config, will move the window all the way to the right of all present windows, and create a new stack with the last window present all the way to the right.
 
