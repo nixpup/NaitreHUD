@@ -19,9 +19,4 @@ In your `~/.config/mango/config.conf`, there is now a new option called `stacker
 So invoking `scoller_stack_left` on the selected leftmost window on your desktop, while `stacker_loop=1` is in your config, will move the window all the way to the right of all present windows, and create a new stack with the last window present all the way to the right.
 
 # Demonstration
-<video width="720" height="480" controls>
-  <source src="https://github.com/nixpup/MangoPup/blob/main/demo.mp4" type="video/mp4">
-</video>
-<video src="https://github.com/nixpup/MangoPup/blob/main/demo.mp4" controls>
-  Your browser does not support the video tag.
-</video>
+[![Demo Video](https://raw.githubusercontent.com/nixpup/MangoPup/refs/heads/main/thumbnail.png)](https://github.com/nixpup/MangoPup/blob/main/demo.mp4)
