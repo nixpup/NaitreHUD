@@ -17,3 +17,8 @@ You can automatically split/resize the window to the left (or right) of the curr
 In your `~/.config/mango/config.conf`, there is now a new option called `stacker_loop` that can be set to either `1` (true/enable) or `0` (false/disable). This option, when enabled, allows you to, when invoking either `scroller_stack_left` with no window left of the currently selected one or vice versa for `scroller_stack_right`, to loop around all windows to the other end and create a stack there.
 
 So invoking `scoller_stack_left` on the selected leftmost window on your desktop, while `stacker_loop=1` is in your config, will move the window all the way to the right of all present windows, and create a new stack with the last window present all the way to the right.
+
+# Demonstration
+<video src="https://github.com/nixpup/MangoPup/blob/main/demo.mp4" controls>
+  Your browser does not support the video tag.
+</video>
