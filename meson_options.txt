@@ -1,0 +1,2 @@
+option('xwayland', type : 'feature', value : 'enabled')
+option('asan', type : 'boolean', value : false)
