@@ -5,6 +5,66 @@
 # Preface
 This is a fork of the [MangoWC](https://github.com/DreamMaoMao/mangowc) Wayland Compositor and Window Manager with a few added features and changes made that I found to be useful or necessary. All credit goes to the creator of [MangoWC](https://github.com/DreamMaoMao/mangowc) [DreamMaoMao](https://github.com/DreamMaoMao).
 
+# Installation
+## NixOS
+Add the following to your `flake.nix`:
+```nix
+{
+  description = "My Flake";
+  inputs = {
+    naitre = {
+      url = "github:nixpup/NaitreHUD";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+  outputs = inputs@{ self, nixpkgs, home-manager, naitre, ... }:
+    let
+      system = "x86_64-linux";
+    in {
+      nixosConfigurations.HOSTNAME = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          naitre.nixosModules.naitre
+          ({ config, pkgs, lib, ... }:
+            home-manager = {
+              extraSpecialArgs = {
+                inherit inputs pkgs;
+              };
+              sharedModules = [
+                inputs.naitre.hmModules.naitre
+              ];
+            };
+            programs.naitre.enable = true;
+          );
+        ];
+      };
+
+    };
+}
+```
+
+And then configure Naitre HUD in your home-managers `home.nix` file:
+```nix
+{ config, pkgs, lib, inputs, ... }:
+wayland.windowManager.naitre = {
+  enable = true;
+  exitScript = true;
+  settings = ''
+    # Your config.conf here.
+    ...
+    bind=Alt,Tab,infinite_move_start
+    bindr=Alt,Tab,infinite_move_end
+    ...
+  '';
+  autostart_sh = ''
+    noctalia-shell &
+  '';
+};
+```
+
 # New Features
 ## Vertical Stacking
 This build of MangoWC supports *vertical stacking* within the *scroller* layout, similar to how the Niri Wayland Compositor and Window Manager works. This means by binding the following actions in your `~/.config/mango/config.conf`:
