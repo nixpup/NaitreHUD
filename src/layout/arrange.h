@@ -702,6 +702,13 @@ arrange(Monitor *m, bool want_animation, bool from_view) {
 					i++;
 				}
 
+				// For infinite layout floating windows, restore geometry from float_geom
+				// before set_arrange_visible is called, since it uses c->geom in resize()
+				if (is_infinite_layout(m) && c->isfloating && 
+					c->float_geom.width > 0 && c->float_geom.height > 0) {
+					c->geom = c->float_geom;
+				}
+
 				set_arrange_visible(m, c, want_animation);
 			} else {
 				set_arrange_hidden(m, c, want_animation);

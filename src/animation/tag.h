@@ -31,7 +31,9 @@ void set_tagin_animation(Monitor *m, Client *c) {
 
 void set_arrange_visible(Monitor *m, Client *c, bool want_animation) {
 
-	if (!c->is_clip_to_hide || !ISTILED(c) || !is_scroller_layout(c->mon)) {
+	// For infinite layout, always enable scene nodes (windows can be outside monitor bounds)
+	if (is_infinite_layout(c->mon) || 
+		(!c->is_clip_to_hide || !ISTILED(c) || !is_scroller_layout(c->mon))) {
 		c->is_clip_to_hide = false;
 		wlr_scene_node_set_enabled(&c->scene->node, true);
 		wlr_scene_node_set_enabled(&c->scene_surface->node, true);
@@ -50,7 +52,15 @@ void set_arrange_visible(Monitor *m, Client *c, bool want_animation) {
 	c->animation.tag_from_rule = false;
 	c->animation.tagouting = false;
 	c->animation.tagouted = false;
-	resize(c, c->geom, 0);
+	
+	// For infinite layout floating windows, use float_geom to preserve position
+	// even when windows are outside the monitor bounds
+	if (is_infinite_layout(c->mon) && c->isfloating && 
+		c->float_geom.width > 0 && c->float_geom.height > 0) {
+		resize(c, c->float_geom, 0);
+	} else {
+		resize(c, c->geom, 0);
+	}
 }
 
 void set_tagout_animation(Monitor *m, Client *c) {

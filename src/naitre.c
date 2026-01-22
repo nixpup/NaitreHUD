@@ -4019,8 +4019,12 @@ void apply_infinite_translation(Monitor *m, double dx, double dy,
 
 		c->geom.x += delta_x;
 		c->geom.y += delta_y;
+		// Keep float_geom fully in sync with geom (including width/height)
+		// This ensures windows moved outside the view preserve their complete geometry
 		c->float_geom.x = c->geom.x;
 		c->float_geom.y = c->geom.y;
+		c->float_geom.width = c->geom.width;
+		c->float_geom.height = c->geom.height;
 		c->iscustompos = 1;
 		c->iscustomsize = 1;
 		resize(c, c->geom, 0);

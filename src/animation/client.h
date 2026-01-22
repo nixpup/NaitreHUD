@@ -532,12 +532,17 @@ void client_apply_clip(Client *c, float factor) {
 
 		client_get_clip(c, &clip_box);
 
-		offset = clip_to_hide(c, &clip_box);
+		// For infinite layout, don't clip windows outside monitor bounds
+		if (!is_infinite_layout(c->mon)) {
+			offset = clip_to_hide(c, &clip_box);
+		}
 
 		apply_border(c);
 		client_draw_shadow(c);
 
-		if (clip_box.width <= 0 || clip_box.height <= 0) {
+		// For infinite layout, always render even if outside monitor bounds
+		if (!is_infinite_layout(c->mon) && 
+			(clip_box.width <= 0 || clip_box.height <= 0)) {
 			return;
 		}
 
@@ -568,14 +573,19 @@ void client_apply_clip(Client *c, float factor) {
 	}
 
 	// 检测窗口是否需要剪切超出屏幕部分，如果需要就调整实际要剪切的矩形
-	offset = clip_to_hide(c, &clip_box);
+	// For infinite layout, don't clip windows outside monitor bounds
+	if (!is_infinite_layout(c->mon)) {
+		offset = clip_to_hide(c, &clip_box);
+	}
 
 	// 应用窗口装饰
 	apply_border(c);
 	client_draw_shadow(c);
 
 	// 如果窗口剪切区域已经剪切到0，则不渲染窗口表面
-	if (clip_box.width <= 0 || clip_box.height <= 0) {
+	// For infinite layout, always render the surface even if outside monitor bounds
+	if (!is_infinite_layout(c->mon) && 
+		(clip_box.width <= 0 || clip_box.height <= 0)) {
 		should_render_client_surface = false;
 		wlr_scene_node_set_enabled(&c->scene_surface->node, false);
 	} else {
