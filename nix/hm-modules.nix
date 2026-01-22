@@ -12,12 +12,33 @@ self: {
     ${lib.optionalString cfg.systemd.enable systemdActivation}
     ${cfg.autostart_sh}
   '';
+  exit_script = pkgs.writeShellScript "naitre-exit.sh" ''
+    #!/usr/bin/env sh
+    
+    choice=$(printf "no
+    yes" | wofi --dmenu \
+      --prompt "Exit MangoWC?" \
+      --width 300 \
+      --height 150)
+    
+    if [ "$choice" = "yes" ]; then
+        kill $(pidof naitre)
+    else
+        return
+    fi
+  '';
 in {
   options = {
     wayland.windowManager.naitre = with lib; {
       enable = mkOption {
         type = types.bool;
         default = false;
+      };
+      extraPackages = mkOption {
+        types = types.listOf types.package;
+        default = [];
+        example = [ pkgs.wofi ];
+        description = "Extra packages to install alongside Naitre HUD";
       };
       package = lib.mkOption {
         type = lib.types.package;
@@ -92,11 +113,21 @@ in {
           waybar &
         '';
       };
+      exitScript = mkOption {
+        description = "Create Exit Script";
+        type = types.bool;
+        default = true;
+        example = true;
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [cfg.package];
+    home.packages = [
+      cfg.package
+    ]
+    ++ cfg.extraPackages
+    ++ lib.optional cfg.exitScript pkgs.wofi;
     xdg.configFile = {
       "naitre/config.conf" = lib.mkIf (cfg.settings != "") {
         text = cfg.settings;
@@ -118,6 +149,12 @@ in {
           ++ lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
         After = ["graphical-session-pre.target"];
         Before = lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
+      };
+    };
+    home.file = lib.mkIf cfg.exitScript {
+      ".scripts/naitre-exit.sh" = {
+        source = exit_script;
+        executable = true;
       };
     };
   };

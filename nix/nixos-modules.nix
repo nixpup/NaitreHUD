@@ -21,7 +21,8 @@ in {
     environment.systemPackages =
       [
         cfg.package
-      ];
+      ]
+      ++ lib.optional true pkgs.wofi;
 
     xdg.portal = {
       enable = lib.mkDefault true;
