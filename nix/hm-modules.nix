@@ -12,7 +12,22 @@ self: {
     ${lib.optionalString cfg.systemd.enable systemdActivation}
     ${cfg.autostart_sh}
   '';
-  exit_script = pkgs.writeShellScript "naitre-exit.sh" ''
+  exit_script_wofi = pkgs.writeShellScript "naitre-exit.sh" ''
+    #!/usr/bin/env sh
+    
+    choice=$(printf "no
+    yes" | wofi --dmenu \
+      --prompt "Exit MangoWC?" \
+      --width 300 \
+      --height 150)
+    
+    if [ "$choice" = "yes" ]; then
+        kill $(pidof naitre)
+    else
+        return
+    fi
+  '';
+  exit_script_vicinae = pkgs.writeShellScript "naitre-exit.sh" ''
     #!/usr/bin/env sh
 
     choice=$(echo -e 'Yes\nNo' | vicinae dmenu --placeholder "Exit NaitreHUD?")
@@ -23,6 +38,7 @@ self: {
         return
     fi
   '';
+  exit_script = if cfg.exitScript.launcher == "wofi" then exit_script_wofi else exit_script_vicinae;
 in {
   options = {
     wayland.windowManager.naitre = with lib; {
@@ -109,11 +125,18 @@ in {
           waybar &
         '';
       };
-      exitScript = mkOption {
-        description = "Create Exit Script";
-        type = types.bool;
-        default = true;
-        example = true;
+      exitScript = {
+        enable = mkOption {
+          description = "Create Exit Script";
+          type = types.bool;
+          default = true;
+          example = true;
+        };
+        launcher = mkOption {
+          description = "Pick the default launcher for the Exit Script";
+          type = types.enum [ "vicinae" "wofi" ];
+          default = "vicinae";
+        };
       };
     };
   };
