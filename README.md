@@ -38,6 +38,7 @@ Add the following to your `flake.nix`:
               ];
             };
             programs.naitre.enable = true; # Enable Naitre Program in configuration.nix Options
+            services.displayManager.defaultSession = "naitre"; # Optional: Add Naitre as Default Display Manager Session
           );
         ];
       };
