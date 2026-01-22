@@ -51,7 +51,10 @@ And then configure Naitre HUD in your home-managers `home.nix` file:
 { config, pkgs, lib, inputs, ... }:
 wayland.windowManager.naitre = {
   enable = true; # Enable Naitre HUD WM
-  exitScript = true; # Write the Exit Script to "~/.scripts/naitre-exit.sh"
+  exitScript = {
+    enable = true; # Write the Exit Script to "~/.scripts/naitre-exit.sh"
+    launcher = "vicinae"; # Set default launcher for the Exit Script to either "vicinae" or "wofi"
+  };
   settings = '' # Add your config.conf Configuration here Declaratively
     # Your config.conf here:
     # Autostart
