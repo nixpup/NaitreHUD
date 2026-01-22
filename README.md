@@ -12,12 +12,12 @@ Add the following to your `flake.nix`:
 {
   description = "My Flake";
   inputs = {
-    naitre = {
+    naitre = { # Add Naitre Flake Input Here
       url = "github:nixpup/NaitreHUD";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = inputs@{ self, nixpkgs, home-manager, naitre, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, naitre, ... }: # Add Naitre to Outputs List
     let
       system = "x86_64-linux";
     in {
@@ -27,17 +27,17 @@ Add the following to your `flake.nix`:
           inherit inputs;
         };
         modules = [
-          naitre.nixosModules.naitre
+          naitre.nixosModules.naitre # Add Naitre as a Module
           ({ config, pkgs, lib, ... }:
             home-manager = {
               extraSpecialArgs = {
                 inherit inputs pkgs;
               };
               sharedModules = [
-                inputs.naitre.hmModules.naitre
+                inputs.naitre.hmModules.naitre # Add Naitre as Home-Manager Module
               ];
             };
-            programs.naitre.enable = true;
+            programs.naitre.enable = true; # Enable Naitre Program in configuration.nix Options
           );
         ];
       };
@@ -50,16 +50,17 @@ And then configure Naitre HUD in your home-managers `home.nix` file:
 ```nix
 { config, pkgs, lib, inputs, ... }:
 wayland.windowManager.naitre = {
-  enable = true;
-  exitScript = true;
-  settings = ''
+  enable = true; # Enable Naitre HUD WM
+  exitScript = true; # Write the Exit Script to "~/.scripts/naitre-exit.sh"
+  settings = '' # Add your config.conf Configuration here Declaratively
     # Your config.conf here.
     ...
+    bind=Alt+Shift,x,spawn,~/.scripts/naitre-exit.sh
     bind=Alt,Tab,infinite_move_start
     bindr=Alt,Tab,infinite_move_end
     ...
   '';
-  autostart_sh = ''
+  autostart_sh = '' # Set up "~/.config/naitre/autostart.sh" File (this need to be enabled/run inside your config.conf before it takes any effect)
     noctalia-shell &
   '';
 };
