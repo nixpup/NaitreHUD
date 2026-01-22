@@ -149,17 +149,21 @@ in {
             default = "vicinae";
           };
         };
-        pavucontrol = mkOption {
-          description = "Pavucontrol Launch Script";
-          type = types.bool;
-          default = false;
-          example = true;
+        pavucontrol = {
+          enable = mkOption {
+            description = "Pavucontrol Launch Script";
+            type = types.bool;
+            default = false;
+            example = true;
+          };
         };
-        vicinaeDmenuRun = mkOption {
-          description = "Vicinae dmenu_run-like Script";
-          type = types.bool;
-          default = false;
-          example = true;
+        vicinaeDmenuRun = {
+          enable = mkOption {
+            description = "Vicinae dmenu_run-like Script";
+            type = types.bool;
+            default = false;
+            example = true;
+          };
         };
         write = {
           exitConf = mkOption {
