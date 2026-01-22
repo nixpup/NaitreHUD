@@ -146,7 +146,7 @@ in {
       cfg.package
     ]
     ++ cfg.extraPackages
-    ++ lib.optional cfg.exitScript pkgs.wofi;
+    ++ lib.optional (cfg.exitScript.enable && cfg.exitScript.launcher == "wofi") pkgs.wofi;
     xdg.configFile = {
       "naitre/config.conf" = lib.mkIf (cfg.settings != "") {
         text = cfg.settings;
