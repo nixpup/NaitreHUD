@@ -116,7 +116,7 @@ executable('naitre',
   link_args : link_args,
 )
 
-# build mmsg
+# build mmsg (hud-msg)
 dwl_ipc_protocol = 'protocols/dwl-ipc-unstable-v2.xml'
 
 wayland_scanner_client_header = generator(
@@ -132,19 +132,19 @@ wayland_scanner_private_code = generator(
 )
 
 # 在 mmsg 目标中使用生成器
-#executable('mmsg',
-#  'mmsg/mmsg.c',
-#  wayland_scanner_private_code.process(dwl_ipc_protocol),
-#  wayland_scanner_client_header.process(dwl_ipc_protocol),
-#  dependencies: [
-#    libwayland_client_dep
-#  ],
-#  install: true,
-#  c_args: [
-#    '-g',
-#    '-Wno-unused-function',
-#  ],
-#)
+executable('hud-msg',
+  'hud-msg/hud-msg.c',
+  wayland_scanner_private_code.process(dwl_ipc_protocol),
+  wayland_scanner_client_header.process(dwl_ipc_protocol),
+  dependencies: [
+    libwayland_client_dep
+  ],
+  install: true,
+  c_args: [
+    '-g',
+    '-Wno-unused-function',
+  ],
+)
 
 desktop_install_dir = join_paths(prefix, 'share/wayland-sessions')
 install_data('naitre.desktop', install_dir : desktop_install_dir)
