@@ -50,11 +50,7 @@ And then configure Naitre HUD in your home-managers `home.nix` file:
 ```nix
 { config, pkgs, lib, inputs, ... }:
 wayland.windowManager.naitre = {
-  enable = true; # Enable Naitre HUD WM
-  exitScript = {
-    enable = true; # Write the Exit Script to "~/.scripts/naitre-exit.sh"
-    launcher = "vicinae"; # Set default launcher for the Exit Script to either "vicinae" or "wofi"
-  };
+  enable = true;
   settings = '' # Add your config.conf Configuration here Declaratively
     # Your config.conf here:
     # Autostart
@@ -62,20 +58,35 @@ wayland.windowManager.naitre = {
     exec-once=noctalia-shell
     exec-once=vicinae server
 
+    # Source Configs
+    source=~/.config/naitre/pavucontrol.conf
+    source=~/.config/naitre/vicinae-dmenu-run.conf
+    source=~/.config/naitre/exit.conf
+
     # Stacker
     stacker_loop=1
     bind=Alt,comma,scroller_stack_left
     bind=Alt,period,scroller_stack_right
     bind=ALT+SHIFT,a,set_proportion,1.0
     
-    # Exit
-    bind=Alt+Shift,x,spawn,~/.scripts/naitre-exit.sh
-
     # Infinite
     bind=Alt,Tab,infinite_move_start
     bindr=Alt,Tab,infinite_move_end
     bind=Alt,c,infinite_center
   '';
+  extraScripts = {
+    exit = {
+      enable = true;
+      launcher = "vicinae";
+    };
+    pavucontrol.enable = true;
+    vicinaeDmenuRun.enable = true;
+    write = {
+      exitConf.enable = true;
+      pavucontrolConf.enable = true;
+      vicinaeDmenuRunConf.enable = true;
+    };
+  };
   autostart_sh = '' # Set up "~/.config/naitre/autostart.sh" File (this need to be enabled/run inside your config.conf before it takes any effect)
     noctalia-shell &
   '';
