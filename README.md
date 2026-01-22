@@ -51,8 +51,8 @@ And then configure Naitre HUD in your home-managers `home.nix` file:
 { config, pkgs, lib, inputs, ... }:
 wayland.windowManager.naitre = {
   enable = true;
-  settings = '' # Add your config.conf Configuration here Declaratively
-    # Your config.conf here:
+  settings = ''
+    # Add your config.conf Configuration here Declaratively:
     # Autostart
     exec-once=swaybg -i /home/USERNAME/Pictures/wallpaper.png
     exec-once=noctalia-shell
@@ -74,14 +74,14 @@ wayland.windowManager.naitre = {
     bindr=Alt,Tab,infinite_move_end
     bind=Alt,c,infinite_center
   '';
-  extraScripts = {
+  extraScripts = { # Enable and use a set of pre-made scripts and configuration files.
     exit = {
       enable = true;
-      launcher = "vicinae";
+      launcher = "vicinae"; # Set default launcher for the exit dialogue to either "vicinae" or "wofi".
     };
     pavucontrol.enable = true;
     vicinaeDmenuRun.enable = true;
-    write = {
+    write = { # Write the ".conf" files in "~/.config/naitre/" so you can "source=" them in your "config.conf".
       exitConf.enable = true;
       pavucontrolConf.enable = true;
       vicinaeDmenuRunConf.enable = true;
