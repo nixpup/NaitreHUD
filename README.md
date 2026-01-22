@@ -41,7 +41,6 @@ Add the following to your `flake.nix`:
           );
         ];
       };
-
     };
 }
 ```
