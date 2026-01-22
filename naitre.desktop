@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Naitre HUD
+Comment=Naitre HUD Wayland WM
+Exec=naitre
+Icon=mango
+Type=Application

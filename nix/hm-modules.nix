@@ -4,7 +4,7 @@ self: {
   pkgs,
   ...
 }: let
-  cfg = config.wayland.windowManager.mango;
+  cfg = config.wayland.windowManager.naitre;
   variables = lib.concatStringsSep " " cfg.systemd.variables;
   extraCommands = lib.concatStringsSep " && " cfg.systemd.extraCommands;
   systemdActivation = ''${pkgs.dbus}/bin/dbus-update-activation-environment --systemd ${variables}; ${extraCommands}'';
@@ -14,15 +14,15 @@ self: {
   '';
 in {
   options = {
-    wayland.windowManager.mango = with lib; {
+    wayland.windowManager.naitre = with lib; {
       enable = mkOption {
         type = types.bool;
         default = false;
       };
       package = lib.mkOption {
         type = lib.types.package;
-        default = self.packages.${pkgs.stdenv.hostPlatform.system}.mango;
-        description = "The mango package to use";
+        default = self.packages.${pkgs.stdenv.hostPlatform.system}.naitre;
+        description = "The naitre package to use";
       };
       systemd = {
         enable = mkOption {
@@ -30,8 +30,8 @@ in {
           default = pkgs.stdenv.isLinux;
           example = false;
           description = ''
-            Whether to enable {file}`mango-session.target` on
-            mango startup. This links to
+            Whether to enable {file}`naitre-session.target` on
+            naitre startup. This links to
             {file}`graphical-session.target`.
             Some important environment variables will be imported to systemd
             and dbus user environment before reaching the target, including
@@ -63,7 +63,7 @@ in {
           type = types.listOf types.str;
           default = [
             "systemctl --user reset-failed"
-            "systemctl --user start mango-session.target"
+            "systemctl --user start naitre-session.target"
           ];
           description = ''
             Extra commands to run after D-Bus activation.
@@ -75,7 +75,7 @@ in {
         '';
       };
       settings = mkOption {
-        description = "mango config content";
+        description = "naitre config content";
         type = types.lines;
         default = "";
         example = ''
@@ -98,17 +98,17 @@ in {
   config = lib.mkIf cfg.enable {
     home.packages = [cfg.package];
     xdg.configFile = {
-      "mango/config.conf" = lib.mkIf (cfg.settings != "") {
+      "naitre/config.conf" = lib.mkIf (cfg.settings != "") {
         text = cfg.settings;
       };
-      "mango/autostart.sh" = lib.mkIf (cfg.autostart_sh != "") {
+      "naitre/autostart.sh" = lib.mkIf (cfg.autostart_sh != "") {
         source = autostart_sh;
         executable = true;
       };
     };
-    systemd.user.targets.mango-session = lib.mkIf cfg.systemd.enable {
+    systemd.user.targets.naitre-session = lib.mkIf cfg.systemd.enable {
       Unit = {
-        Description = "mango compositor session";
+        Description = "naitre compositor session";
         Documentation = ["man:systemd.special(7)"];
         BindsTo = ["graphical-session.target"];
         Wants =

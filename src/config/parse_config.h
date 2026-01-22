@@ -986,6 +986,14 @@ FuncType parse_func_name(char *func_name, Arg *arg, char *arg_value,
 	} else if (strcmp(func_name, "moveresize") == 0) {
 		func = moveresize;
 		(*arg).ui = parse_mouse_action(arg_value);
+	} else if (strcmp(func_name, "infinite_move") == 0) {
+		func = infinite_move;
+	} else if (strcmp(func_name, "infinite_move_start") == 0) {
+		func = infinite_move_start;
+	} else if (strcmp(func_name, "infinite_move_end") == 0) {
+		func = infinite_move_end;
+	} else if (strcmp(func_name, "infinite_center") == 0) {
+		func = infinite_center;
 	} else if (strcmp(func_name, "togglemaximizescreen") == 0) {
 		func = togglemaximizescreen;
 	} else if (strcmp(func_name, "viewtoleft_have_client") == 0) {
@@ -2370,7 +2378,7 @@ void parse_config_file(Config *config, const char *file_path) {
 				fprintf(stderr, "Error: HOME environment variable not set.\n");
 				return;
 			}
-			snprintf(full_path, sizeof(full_path), "%s/.config/mango/%s", home,
+			snprintf(full_path, sizeof(full_path), "%s/.config/naitre/%s", home,
 					 file_path + 1);
 		}
 		file = fopen(full_path, "r");
@@ -3119,13 +3127,13 @@ void parse_config(void) {
 			return;
 		}
 		// 构建日志文件路径
-		snprintf(filename, sizeof(filename), "%s/.config/mango/config.conf",
+		snprintf(filename, sizeof(filename), "%s/.config/naitre/config.conf",
 				 homedir);
 
 		// 检查文件是否存在
 		if (access(filename, F_OK) != 0) {
 			// 如果文件不存在，则使用 /etc/mango/config.conf
-			snprintf(filename, sizeof(filename), "%s/mango/config.conf",
+			snprintf(filename, sizeof(filename), "%s/naitre/config.conf",
 					 SYSCONFDIR);
 		}
 	}

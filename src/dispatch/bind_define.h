@@ -374,6 +374,60 @@ int32_t moveresize(const Arg *arg) {
 	return 0;
 }
 
+int32_t infinite_move(const Arg *arg) {
+	if (cursor_mode != CurNormal && cursor_mode != CurPressed)
+		return 0;
+
+	if (!selmon || !is_infinite_layout(selmon))
+		return 0;
+
+	cursor_mode = CurInfiniteMove;
+	infinite_drag_mon = selmon;
+	last_apply_drap_time = 0;
+	start_drag_window = false;
+	grabc = NULL;
+	wlr_cursor_set_xcursor(cursor, cursor_mgr, "grab");
+	return 0;
+}
+
+int32_t infinite_move_start(const Arg *arg) {
+    if (locked) {
+        return 0; // Don't start if locked
+    }
+    is_keyboard_infinite_move_active = true;
+    initial_cursor_x = cursor->x;
+    initial_cursor_y = cursor->y;
+    cursor_mode = CurInfiniteMove;
+    // The user wants the cursor to stay in place, so we don't warp it.
+    // The screen movement will be relative to the cursor's initial position.
+    wlr_cursor_set_xcursor(cursor, cursor_mgr, "grab"); // Set cursor to grabbing hand
+    return 1; // Handled by compositor
+}
+
+int32_t infinite_move_end(const Arg *arg) {
+    if (!is_keyboard_infinite_move_active) {
+        return 0; // Not active, nothing to do
+    }
+    is_keyboard_infinite_move_active = false;
+    cursor_mode = CurNormal;
+    // Restore default cursor
+    if (!cursor_hidden)
+        wlr_cursor_set_xcursor(cursor, cursor_mgr, "default");
+    return 1; // Handled by compositor
+}
+
+int32_t infinite_center(const Arg *arg) {
+	if (!selmon || !selmon->sel || !is_infinite_layout(selmon))
+		return 0;
+
+	Client *c = selmon->sel;
+	double dx = (double)(selmon->w.width - c->geom.width) / 2 - c->geom.x;
+	double dy = (double)(selmon->w.height - c->geom.height) / 2 - c->geom.y;
+
+	apply_infinite_translation(selmon, dx, dy, 0);
+	return 0;
+}
+
 int32_t movewin(const Arg *arg) {
 	Client *c = NULL;
 	c = selmon->sel;

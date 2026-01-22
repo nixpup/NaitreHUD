@@ -4,15 +4,15 @@ self: {
   pkgs,
   ...
 }: let
-  cfg = config.programs.mango;
+  cfg = config.programs.naitre;
 in {
   options = {
-    programs.mango = {
-      enable = lib.mkEnableOption "mango, a wayland compositor based on dwl";
+    programs.naitre = {
+      enable = lib.mkEnableOption "naitre, a wayland compositor based on dwl";
       package = lib.mkOption {
         type = lib.types.package;
-        default = self.packages.${pkgs.stdenv.hostPlatform.system}.mango;
-        description = "The mango package to use";
+        default = self.packages.${pkgs.stdenv.hostPlatform.system}.naitre;
+        description = "The naitre package to use";
       };
     };
   };
@@ -27,7 +27,7 @@ in {
       enable = lib.mkDefault true;
 
       config = {
-        mango = {
+        naitre = {
           default = [
             "gtk"
           ];

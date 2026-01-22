@@ -26,6 +26,10 @@ bool is_scroller_layout(Monitor *m) {
 	return false;
 }
 
+bool is_infinite_layout(Monitor *m) {
+	return m && m->pertag->ltidxs[m->pertag->curtag]->id == INFINITE;
+}
+
 uint32_t get_tag_status(uint32_t tag, Monitor *m) {
 	Client *c = NULL;
 	uint32_t status = 0;

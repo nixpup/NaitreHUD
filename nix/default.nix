@@ -22,7 +22,7 @@
   debug ? false,
 }:
 stdenv.mkDerivation {
-  pname = "mango";
+  pname = "naitre";
   version = "nightly";
 
   src = builtins.path {
@@ -62,13 +62,13 @@ stdenv.mkDerivation {
     ];
 
   passthru = {
-    providedSessions = ["mango"];
+    providedSessions = ["naitre"];
   };
 
   meta = {
-    mainProgram = "mango";
+    mainProgram = "naitre";
     description = "A streamlined but feature-rich Wayland compositor";
-    homepage = "https://github.com/DreamMaoMao/mango";
+    homepage = "https://github.com/nixpup/NaitreHUD";
     license = lib.licenses.gpl3Plus;
     maintainers = [];
     platforms = lib.platforms.unix;

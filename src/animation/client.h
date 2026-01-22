@@ -928,7 +928,8 @@ void resize(Client *c, struct wlr_box geo, int32_t interact) {
 	// float_geom = c->geom;
 	bbox = (interact || c->isfloating || c->isfullscreen) ? &sgeom : &c->mon->w;
 
-	if (is_scroller_layout(c->mon) && (!c->isfloating || c == grabc)) {
+	if ((is_scroller_layout(c->mon) && (!c->isfloating || c == grabc)) ||
+		is_infinite_layout(c->mon)) {
 		c->geom = geo;
 		c->geom.width = MAX(1 + 2 * (int32_t)c->bw, c->geom.width);
 		c->geom.height = MAX(1 + 2 * (int32_t)c->bw, c->geom.height);

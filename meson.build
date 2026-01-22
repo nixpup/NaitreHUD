@@ -1,5 +1,5 @@
-project('mango', ['c', 'cpp'],
-  version : '0.10.10',
+project('naitre', ['c', 'cpp'],
+  version : '0.0.01',
 )
 
 subdir('protocols')
@@ -94,8 +94,8 @@ if get_option('asan')
   link_args += '-fsanitize=address'
 endif
 
-executable('mango',
-  'src/mango.c',
+executable('naitre',
+  'src/naitre.c',
   'src/common/util.c',
   'src/ext-protocol/wlr_ext_workspace_v1.c',
   wayland_sources,
@@ -132,20 +132,20 @@ wayland_scanner_private_code = generator(
 )
 
 # 在 mmsg 目标中使用生成器
-executable('mmsg',
-  'mmsg/mmsg.c',
-  wayland_scanner_private_code.process(dwl_ipc_protocol),
-  wayland_scanner_client_header.process(dwl_ipc_protocol),
-  dependencies: [
-    libwayland_client_dep
-  ],
-  install: true,
-  c_args: [
-    '-g',
-    '-Wno-unused-function',
-  ],
-)
+#executable('mmsg',
+#  'mmsg/mmsg.c',
+#  wayland_scanner_private_code.process(dwl_ipc_protocol),
+#  wayland_scanner_client_header.process(dwl_ipc_protocol),
+#  dependencies: [
+#    libwayland_client_dep
+#  ],
+#  install: true,
+#  c_args: [
+#    '-g',
+#    '-Wno-unused-function',
+#  ],
+#)
 
 desktop_install_dir = join_paths(prefix, 'share/wayland-sessions')
-install_data('mango.desktop', install_dir : desktop_install_dir)
-install_data('config.conf', install_dir : join_paths(sysconfdir, 'mango'))
+install_data('naitre.desktop', install_dir : desktop_install_dir)
+install_data('config.conf', install_dir : join_paths(sysconfdir, 'naitre'))
