@@ -14,14 +14,10 @@ self: {
   '';
   exit_script = pkgs.writeShellScript "naitre-exit.sh" ''
     #!/usr/bin/env sh
-    
-    choice=$(printf "no
-    yes" | wofi --dmenu \
-      --prompt "Exit MangoWC?" \
-      --width 300 \
-      --height 150)
-    
-    if [ "$choice" = "yes" ]; then
+
+    choice=$(echo -e 'Yes\nNo' | vicinae dmenu --placeholder "Exit NaitreHUD?")
+
+    if [ "$choice" = "Yes" ]; then
         kill $(pidof naitre)
     else
         return
