@@ -35,7 +35,7 @@ in {
         default = false;
       };
       extraPackages = mkOption {
-        types = types.listOf types.package;
+        type = types.listOf types.package;
         default = [];
         example = [ pkgs.wofi ];
         description = "Extra packages to install alongside Naitre HUD";
