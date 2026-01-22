@@ -62,6 +62,7 @@ wayland.windowManager.naitre = {
   autostart_sh = '' # Set up "~/.config/naitre/autostart.sh" File (this need to be enabled/run inside your config.conf before it takes any effect)
     noctalia-shell &
   '';
+  extraPackages = [ pkgs.swaybg ]; # Extra Packages to be installed alongside Naitre HUD
 };
 ```
 
