@@ -93,7 +93,7 @@ If you've installed all the necessary dependencies (See Nix Files for Dependency
 
 # New Features
 ## Vertical Stacking
-This build of MangoWC supports *vertical stacking* within the *scroller* layout, similar to how the Niri Wayland Compositor and Window Manager works. This means by binding the following actions in your `~/.config/mango/config.conf`:
+This build of MangoWC supports *vertical stacking* within the *scroller* layout, similar to how the Niri Wayland Compositor and Window Manager works. This means by binding the following actions in your `~/.config/naitre/config.conf`:
 ```
 bind=Alt,comma,scroller_stack_left
 bind=Alt,period,scroller_stack_right
@@ -127,7 +127,7 @@ The new keybind configuration option `bindr` can check for the release of a key,
 3. `infinite_center` - Move and center the users desktop view on the currently selected window.
 
 ## Stacker Looping
-In your `~/.config/mango/config.conf`, there is now a new option called `stacker_loop` that can be set to either `1` (true/enable) or `0` (false/disable), which looks like this:
+In your `~/.config/naitre/config.conf`, there is now a new option called `stacker_loop` that can be set to either `1` (true/enable) or `0` (false/disable), which looks like this:
 ```
 stacker_loop=1
 ```
