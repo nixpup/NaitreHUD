@@ -170,7 +170,7 @@ in {
         Before = lib.optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
       };
     };
-    home.file = lib.mkIf cfg.exitScript {
+    home.file = lib.mkIf cfg.exitScript.enable {
       ".scripts/naitre-exit.sh" = {
         source = exit_script;
         executable = true;
