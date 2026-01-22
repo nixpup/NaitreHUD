@@ -145,4 +145,4 @@ So invoking `scoller_stack_left` on the selected leftmost window on your desktop
 **Click the Thumbnail to Download or View the Demo Video**
 
 # Information for Noctalia-Shell Users
-To properly use **noctalia-shell** with Naitre HUD you either have to set `env=XDG_CURRENT_DESKTOP,mango` and `env=WINDOW_MANAGER,mango` in your `config.conf`, or use [my custom fork](https://github.com/nixpup/noctalia-shell) of **noctalia-shell** that also works when those variables are set to the default: `naitre`.
+To properly use **noctalia-shell** with Naitre HUD you either have to set `env=XDG_CURRENT_DESKTOP,mango` and `env=WINDOW_MANAGER,mango` in your `config.conf`, or use [my custom fork](https://github.com/nixpup/noctalia-shell) of **noctalia-shell** that also works when those variables are set to the default: `naitre`. Do note that you also need to install the *regular* MangoWC Wayland Window Manager when **not** using my noctalia-shell fork, as Naitre HUD doesn't come with the `mmsg` binary, in Naitre HUD this binary is called `hud-msg`.
