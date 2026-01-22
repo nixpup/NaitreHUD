@@ -52,12 +52,25 @@ wayland.windowManager.naitre = {
   enable = true; # Enable Naitre HUD WM
   exitScript = true; # Write the Exit Script to "~/.scripts/naitre-exit.sh"
   settings = '' # Add your config.conf Configuration here Declaratively
-    # Your config.conf here.
-    ...
+    # Your config.conf here:
+    # Autostart
+    exec-once=swaybg -i /home/USERNAME/Pictures/wallpaper.png
+    exec-once=noctalia-shell
+    exec-once=vicinae server
+
+    # Stacker
+    stacker_loop=1
+    bind=Alt,comma,scroller_stack_left
+    bind=Alt,period,scroller_stack_right
+    bind=ALT+SHIFT,a,set_proportion,1.0
+    
+    # Exit
     bind=Alt+Shift,x,spawn,~/.scripts/naitre-exit.sh
+
+    # Infinite
     bind=Alt,Tab,infinite_move_start
     bindr=Alt,Tab,infinite_move_end
-    ...
+    bind=Alt,c,infinite_center
   '';
   autostart_sh = '' # Set up "~/.config/naitre/autostart.sh" File (this need to be enabled/run inside your config.conf before it takes any effect)
     noctalia-shell &
