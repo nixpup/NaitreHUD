@@ -86,7 +86,7 @@ To set up the build process and build the Naitre HUD, run the following commands
 meson setup build
 ninja -C build
 ```
-If you've installed all the necessary dependencies (See Nix Files for Dependency List), this should build you the **"naitre"** binary inside the `./build/` directory. For Display Manager configuration please see the Nix Files and the included **"naitre.desktop"** File.
+If you've installed all the necessary dependencies (See Nix Files for Dependency List), this should build you the `./naitre` binary inside the `./build/` directory (`./build/naitre`). For Display Manager configuration please see the Nix Files and the included `naitre.desktop` File.
 
 # New Features
 ## Vertical Stacking
