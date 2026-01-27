@@ -15,27 +15,24 @@ self: {
   exit_script_wofi = pkgs.writeShellScript "naitre-exit.sh" ''
     #!/usr/bin/env sh
 
-    choice=$(printf "no
-    yes" | wofi --dmenu \
+    pid=$(pidof naitre)
+    choice=$(printf "Yes\nNo" | wofi --dmenu \
       --prompt "Exit NaitreHUD?" \
       --width 300 \
       --height 150)
 
-    if [ "$choice" = "yes" ]; then
-        kill $(pidof naitre)
-    else
-        return
+    if [ "$choice" = "Yes" ] && [ -n "$pid" ]; then
+        kill "$pid"
     fi
   '';
   exit_script_vicinae = pkgs.writeShellScript "naitre-exit.sh" ''
     #!/usr/bin/env sh
 
+    pid=$(pidof naitre)
     choice=$(printf 'Yes\nNo' | vicinae dmenu --placeholder "Exit NaitreHUD?")
 
-    if [ "$choice" = "Yes" ]; then
-        kill $(pidof naitre)
-    else
-        return
+    if [ "$choice" = "Yes" ] && [ -n "$pid" ]; then
+        kill "$pid"
     fi
   '';
   exit_script = if cfg.scripts.exit.launcher == "wofi" then exit_script_wofi else exit_script_vicinae;
@@ -142,9 +139,9 @@ in {
             # Source #
             #--------#
             # Generated Configs
-            source=~/.config/naitre/pavucontrol.conf
-            source=~/.config/naitre/vicinae-dmenu-run.conf
-            source=~/.config/naitre/exit.conf
+            ${lib.optionalString cfg.scripts.pavucontrol.enable "source=~/.config/naitre/pavucontrol.conf"}
+            ${lib.optionalString cfg.scripts.vicinaeDmenuRun.enable "source=~/.config/naitre/vicinae-dmenu-run.conf"}
+            ${lib.optionalString cfg.scripts.exit.enable "source=~/.config/naitre/exit.conf"}
             # User Config
             source=~/.config/naitre/main.conf
           '';
@@ -152,10 +149,6 @@ in {
             #--------#
             # Source #
             #--------#
-            # Generated Configs
-            source=~/.config/naitre/pavucontrol.conf
-            source=~/.config/naitre/vicinae-dmenu-run.conf
-            source=~/.config/naitre/exit.conf
             # User Config
             source=~/.config/naitre/main.conf
           '';
@@ -180,7 +173,7 @@ in {
         };
       };
       autostart_sh = mkOption {
-        description = "WARRNING: This is a shell script, but no need to add shebang";
+        description = "WARNING: This is a shell script, but no need to add a shebang.";
         type = types.lines;
         default = "";
         example = ''
@@ -206,12 +199,6 @@ in {
             example = "SUPER,x";
             description = "Keybind for the Exit Config Action";
           };
-          write = mkOption {
-            description = "Write Exit.conf";
-            type = types.bool;
-            default = false;
-            example = true;
-          };
         };
         pavucontrol = {
           enable = mkOption {
@@ -224,13 +211,7 @@ in {
             type = types.str;
             default = "SUPER,a";
             example = "Alt,u";
-            decription = "Keybind for the Pavucontrol Config Action";
-          };
-          write = mkOption {
-            description = "Write Pavucontrol Launch Script";
-            type = types.bool;
-            default = false;
-            example = true;
+            description = "Keybind for the Pavucontrol Config Action";
           };
         };
         vicinaeDmenuRun = {
@@ -246,12 +227,6 @@ in {
             example = "Alt,g";
             description = "Keybind for the Vicinae Dmenu Run Config Action";
           };
-          write = mkOption {
-            description = "Write Vicinae Dmenu_Run Script";
-            type = types.bool;
-            default = false;
-            example = true;
-          };
         };
       };
     };
@@ -264,7 +239,7 @@ in {
     ++ cfg.extraPackages
     ++ lib.optional (cfg.scripts.exit.enable && cfg.scripts.exit.launcher == "wofi") pkgs.wofi;
     xdg.configFile = {
-      "naitre/config.conf" = lib.mkIf (cfg.settings != "") {
+      "naitre/${if cfg.modularize.enable then "main.conf" else "config.conf"}" = lib.mkIf (cfg.settings != "") {
         text = cfg.settings;
       };
       "naitre/autostart.sh" = lib.mkIf (cfg.autostart_sh != "") {
@@ -297,20 +272,6 @@ in {
           source = exit_script;
           executable = true;
         };
-      })
-      (lib.mkIf cfg.scripts.pavucontrol.enable {
-        ".scripts/pavucontrol.sh" = {
-          source = pavucontrol_script;
-          executable = true;
-        };
-      })
-      (lib.mkIf cfg.scripts.vicinaeDmenuRun.enable {
-        ".scripts/vicinae-dmenu-run.sh" = {
-          source = vicinae_dmenu_run_script;
-          executable = true;
-        };
-      })
-      (lib.mkIf cfg.scripts.exit.write {
         ".config/naitre/exit.conf" = {
           text = ''
             # Include via: 'source=~/.config/naitre/exit.conf' in '~/.config/naitre/config.conf'.
@@ -318,7 +279,11 @@ in {
           '';
         };
       })
-      (lib.mkIf cfg.scripts.pavucontrol.write {
+      (lib.mkIf cfg.scripts.pavucontrol.enable {
+        ".scripts/pavucontrol.sh" = {
+          source = pavucontrol_script;
+          executable = true;
+        };
         ".config/naitre/pavucontrol.conf" = {
           text = ''
             # Include via: 'source=~/.config/naitre/pavucontrol.conf' in '~/.config/naitre/config.conf'.
@@ -326,7 +291,11 @@ in {
           '';
         };
       })
-      (lib.mkIf cfg.scripts.vicinaeDmenuRun.write {
+      (lib.mkIf cfg.scripts.vicinaeDmenuRun.enable {
+        ".scripts/vicinae-dmenu-run.sh" = {
+          source = vicinae_dmenu_run_script;
+          executable = true;
+        };
         ".config/naitre/vicinae-dmenu-run.conf" = {
           text = ''
             # Include via: 'source=~/.config/naitre/vicinae-dmenu-run.conf' in '~/.config/naitre/config.conf'.
@@ -336,4 +305,4 @@ in {
       })
     ];
   };
-};
+}
