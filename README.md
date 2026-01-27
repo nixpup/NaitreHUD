@@ -51,46 +51,40 @@ And then configure Naitre HUD in your home-managers `home.nix` file:
 { config, pkgs, lib, inputs, ... }:
 wayland.windowManager.naitre = {
   enable = true;
-  settings = ''
-    # Add your config.conf Configuration here Declaratively:
-    # Autostart
-    exec-once=swaybg -i /home/USERNAME/Pictures/wallpaper.png
-    exec-once=noctalia-shell
-    exec-once=vicinae server
-
-    # Source Configs
-    source=~/.config/naitre/pavucontrol.conf
-    source=~/.config/naitre/vicinae-dmenu-run.conf
-    source=~/.config/naitre/exit.conf
-
-    # Stacker
-    stacker_loop=1
-    bind=Alt,comma,scroller_stack_left
-    bind=Alt,period,scroller_stack_right
-    bind=ALT+SHIFT,a,set_proportion,1.0
-    
-    # Infinite
-    bind=Alt,Tab,infinite_move_start
-    bindr=Alt,Tab,infinite_move_end
-    bind=Alt,c,infinite_center
-  '';
-  extraScripts = { # Enable and use a set of pre-made scripts and configuration files.
+  modularize = {
+    enable = true;
+    additional = ''
+      #------------#
+      # Additional #
+      #------------#
+      # Autostart
+      exec-once=wl-paste --watch cliphist store
+      exec-once=dex --autostart environment naitre
+      exec-once=swaybg -i /home/puppy/Pictures/Wallpapers/fuwamoco.jpg -m fill
+      exec-once=gammastep -l 52.520008:13.404954 -t 4000:4000
+      exec-once=dunst
+      exec-once=dms run
+      exec-once=vicinae server
+      exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots
+      exec-once=sway-audio-idle-inhibit
+      exec=xwayland-satellite :0
+    '';
+  };
+  scripts = {
     exit = {
       enable = true;
-      launcher = "vicinae"; # Set default launcher for the exit dialogue to either "vicinae" or "wofi".
+      launcher = "vicinae";
+      keybind = "Alt+Shift,x";
     };
-    pavucontrol.enable = true;
-    vicinaeDmenuRun.enable = true;
-    write = { # Write the ".conf" files in "~/.config/naitre/" so you can "source=" them in your "config.conf".
-      exitConf.enable = true;
-      pavucontrolConf.enable = true;
-      vicinaeDmenuRunConf.enable = true;
+    pavucontrol = {
+      enable = true;
+      keybind = "SUPER,a";
+    };
+    vicinaeDmenuRun = {
+      enable = true;
+      keybind = "SUPER,f";
     };
   };
-  autostart_sh = '' # Set up "~/.config/naitre/autostart.sh" File (this need to be enabled/run inside your config.conf before it takes any effect)
-    noctalia-shell &
-  '';
-  extraPackages = [ pkgs.swaybg ]; # Extra Packages to be installed alongside Naitre HUD
 };
 ```
 
