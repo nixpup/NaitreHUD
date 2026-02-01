@@ -1,4 +1,4 @@
-(define-module (naitre)
+(define-module (files packages NaitreHUD package)
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix gexp)
@@ -18,14 +18,22 @@
   #:use-module (guix licenses))
 
 
-(define-public naitre-git
+(define-public naitre
+  (let ((commit "fe813d7b157c2d290a79cc863387800e99f1f1eb")
+        (revision "1"))
   (package
     (name "naitre")
-    (version "git")
-    (source (local-file "." "naitre-checkout"
-                        #:recursive? #t
-                        #:select? (or (git-predicate (current-source-directory))
-                                      (const #t))))
+    (version(git-version "1.0.0" revision commit))
+    (source (origin
+             (method git-fetch)
+             (uri (git-reference
+                   (url "https://github.com/nixpup/NaitreHUD")
+                   (commit commit)))
+             (file-name (git-file-name name version))
+             (sha256
+              (base32
+               "1jbkpcrdw1yqfqnijgfchs0w2iy2ncw9a18h5czvsgcfk5hji4fj"))
+             ))
     (build-system meson-build-system)
     (arguments
      (list
@@ -39,7 +47,23 @@
                 (("'-DSYSCONFDIR=\\\"@0@\\\"'.format\\('/etc'\\)")
                  "'-DSYSCONFDIR=\"@0@\"'.format(sysconfdir)")
                 (("sysconfdir = sysconfdir.substring\\(prefix.length\\(\\)\\)")
-                 "")))))))
+                 ""))))
+          (add-after 'install 'install-desktop-file
+            (lambda* (#:key outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (wayland-sessions (string-append out "/share/wayland-sessions")))
+                (mkdir-p wayland-sessions)
+                (call-with-output-file (string-append wayland-sessions "/naitre.desktop")
+                  (lambda (port)
+                    (format port "[Desktop Entry]
+Encoding=UTF-8
+Name=NaitreHUD
+Comment=NaitreHUD Wayland WM
+Exec=~a/bin/naitre
+Type=Application
+DesktopNames=NaitreHUD
+"
+                            out)))))))))
     (inputs (list wayland
                   libinput
                   libdrm
@@ -56,9 +80,9 @@
                   scenefx))
     (native-inputs (list pkg-config wayland-protocols))
     (home-page "https://github.com/nixpup/NaitreHUD")
-    (synopsis "Wayland compositor based on wlroots and scenefx")
+    (synopsis "Wayland Compositor and Window Manager")
     (description "A Wayland compositor based on wlroots and scenefx,
 inspired by dwl but aiming to be more feature-rich.")
-    (license gpl3)))
+    (license gpl3))))
 
-naitre-git
+naitre
